@@ -1,0 +1,246 @@
+ version: 2
+
+models:
+  - name: stg_channel
+    description: "This table store Class of buyer (Hospital, Pharmacy) and their respective ID's"
+
+    columns:
+      - name: channel_id
+        description: "This is a unique identifier for a channel"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+      - name: channel
+        description: "Class of buyer (Hospital, Pharmacy)"
+
+ 
+  - name: stg_city
+    description: "This table contains the distinct cities of customers and their ID's"
+    columns:
+      
+      - name: city_id
+        description: "This is a unique identifier for a cities"
+        tests:
+          - unique
+          - not_null
+          
+
+      - name: city
+        description: "name of Customer's city"
+
+
+      - name: country_id
+        description: "This is a unique identifier for a country"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_country')
+              pk_column_name: country_id
+        
+        
+
+      - name: latitude
+        description: "Customer's Geo Latitude"
+
+      - name: longitude
+        description: "Customer's Geo Longitude"
+
+  - name: stg_country
+    description: "This table contains details of countries of customers and ID's for countries"
+    columns:
+      - name: country
+        description: "name of customers country"
+
+      - name: country_id
+        description: "This is a unique identifier for  different countries"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+  - name: stg_customer
+    description: "This table contains the details of all distinct customers"
+    columns:
+      - name: customer_name
+        description: "names of customers"
+
+      - name: city
+        description: "cities of customers"
+
+      - name: city_id
+        description: "This is a unique identifier for  different cities"
+
+      - name: customer_id
+        description: "This is a unique identifier for  different customers"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+  - name: stg_distributor
+    description: "This table contains details about the different Wholesaler and their id's"
+    columns:
+      - name: distributor
+        description: "Name of Wholesaler"
+
+      - name: distributor_id
+        description: "This is a unique identifier for  different distributors"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+  - name: stg_month
+    description: " This Table contains details about the  month when sale was made"
+    columns:
+      - name: month
+        description: " month when sale was made"
+
+      - name: month_id
+        description: "This is a unique identifier for  different months"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+  - name: stg_product
+    description: "This Table contains details about the Name of Drug and Class of Drug (Antibiotics, etc.)"
+    columns:
+      - name: product_name
+        description: "Name of Drugs"
+
+      - name: product_class
+        description: "Class of Drug (Antibiotics, etc.)"
+
+      - name: product_id
+        description: "This is a unique identifier for  different products"
+        tests:
+          - unique
+          - not_null
+           - dbt_constraints.primary_key
+
+  - name: stg_sales_rep
+    description: "This Table contains details about the Name of the Sales resentatives who facilitated the sale"
+    columns:
+      - name: sales_rep
+        description: "Name of the Sales resentatives who facilitated the sale"
+
+      - name: sales_rep_id
+        description: "This is a unique identifier for  different sales rep's"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+        
+
+      - name: sales_team_id
+        description: "This is a unique identifier for  different sales Team"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_sales_team')
+              pk_column_name: sales_team_id
+
+  - name: stg_sales_team
+    description: "This Table contains details about the Sale resentatives's team and Sales resentatives's Manager Names"
+    columns:
+      - name: manager
+        description: "Sales resentatives's Manager Name"
+
+      - name: sales_team
+        description: "Sale resentatives's team"
+
+      - name: sales_team_id
+        description: "This is a unique identifier for  different sales Team's"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+  - name: stg_sales
+    description: "This Table contains details about the Amount made from sale,Price product was sold for,Quantity purchased,Year sale was made and id's "
+    columns:
+      - name: subchannel_id
+        description: "This is a unique identifier for a subchannel"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_subchannel')
+              pk_column_name: subchannel_id
+
+      
+
+      - name: distributor_id
+        description: "This is a unique identifier for a distributor"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_distrinutor')
+              pk_column_name: distributor_id
+
+      
+      - name: month_id
+        description: "This is a unique identifier for a months"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_month')
+              pk_column_name: month_id
+
+      - name: sales_rep_id
+        description: "This is a unique identifier for a sales representative"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_sales_rep')
+              pk_column_name: sales_rep_id
+
+      
+      - name: product_id
+        description: "This is a unique identifier for a products"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_product')
+              pk_column_name: product_id
+
+
+      - name: customer_id
+        description: "This is a unique identifier for a customers"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_customer')
+              pk_column_name: customer_id
+
+      - name: city_id
+        description: "This is a unique identifier for a cities"
+        
+
+      - name: price
+        description: "Price for product was sold for"
+
+      - name: quantity
+        description: "Quantity purchased"
+
+      - name: sales
+        description: "Amount made from sale"
+
+      - name: year
+        description: "Year sale was made"
+
+  - name: stg_subchannel
+    description: "This Table contains details about the Sector of the buyer (Government, Private, etc.) and ids for subchannels"
+    columns:
+      - name: sub_channel
+        description: "Sector of the buyer (Government, Private, etc.)"
+
+      - name: subchannel_id
+        description: "This is a unique identifier for a subchannels"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+
+      - name: channel_id
+        description: "This is a unique identifier for a channels"
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('stg_channel')
+              pk_column_name: channel_id
+        
+

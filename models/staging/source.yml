@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: snowflake
+    description: 'A sample database provided by snowflake'
+    database: DEMO_DB
+    schema: DBT_PROJECT
+    tables:
+      - name: pharma_with_id
+      
